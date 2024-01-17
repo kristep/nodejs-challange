@@ -6,6 +6,8 @@
     "type": "module",
     "scripts": {
         "start": "tsx watch index.js",
+        "prettier": "npx prettier --check .",
+        "prettier-fix": "npx prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
