@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import helmet from "helmet"
 import { officeRouter } from "./src/routes/offices.ts"
+import { employeeRouter } from "./src/routes/employees.ts"
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.use('/', officeRouter)
+app.use('/', employeeRouter)
 
 app.listen(port, () => console.log(`App listening on port ${port}!`))
 
