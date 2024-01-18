@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import sqlite3 from 'sqlite3';
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuid } from 'uuid';
+import { validationResult } from 'express-validator';
 
 import { Office } from '../types';
 
@@ -37,6 +38,11 @@ export const createOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
     const { city, address, name } = req.body;
+    const validationErrors = validationResult(req);
+    
+    if (!validationErrors.isEmpty()) {
+        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ error: validationErrors.array() });
+    }
 
     db.run(
         `INSERT INTO offices(id, city, address, name) VALUES('${random}', '${city}', '${address}', '${name}')`,
