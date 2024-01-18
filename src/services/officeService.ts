@@ -5,8 +5,10 @@ import { v4 as uuid } from 'uuid';
 
 import { Office } from '../types';
 
+const PATH_DB = 'src/database/database.db';
+
 export const getAllOffices = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const sql = 'SELECT * FROM offices';
     const params = [];
 
@@ -32,7 +34,7 @@ export const getAllOffices = async (req: Request, res: Response) => {
 };
 
 export const createOffice = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
     const { city, address, name } = req.body;
 
@@ -51,7 +53,7 @@ export const createOffice = async (req: Request, res: Response) => {
 };
 
 export const updateOfficeName = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const { name } = req.body;
     const id = req.params.id;
 
@@ -67,7 +69,7 @@ export const updateOfficeName = async (req: Request, res: Response) => {
 };
 
 export const deleteOffice = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const id = req.params.id;
 
     db.run(`DELETE FROM offices WHERE id = '${id}'`, (err) => {

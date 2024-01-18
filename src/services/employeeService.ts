@@ -5,8 +5,10 @@ import { v4 as uuid } from 'uuid';
 
 import { Employee } from '../types';
 
+const PATH_DB = 'src/database/database.db';
+
 export const getAllEmployees = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const sql = 'SELECT * FROM employees';
     const params = [];
 
@@ -32,7 +34,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
 };
 
 export const createEmployee = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
     const { first_name, last_name, address, office_id, title, prefers_remote } = req.body;
 
@@ -51,7 +53,7 @@ export const createEmployee = async (req: Request, res: Response) => {
 };
 
 export const deleteEmployee = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const id = req.params.id;
 
     db.run(`DELETE FROM employees WHERE id = '${id}'`, (err) => {
@@ -66,7 +68,7 @@ export const deleteEmployee = async (req: Request, res: Response) => {
 };
 
 export const getRemoteEmployeesPerOffice = async (req: Request, res: Response) => {
-    const db = new sqlite3.Database('./database/database.db');
+    const db = new sqlite3.Database(PATH_DB);
     const office_id = req.params.office_id;
 
     db.get(
