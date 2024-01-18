@@ -37,7 +37,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
 export const createEmployee = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
-    const { first_name, last_name, address, office_id, title, prefers_remote } = req.body;
+    const { first_name, last_name, address, office_id, title, prefers_remote } = req.body as Employee;
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {

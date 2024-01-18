@@ -37,7 +37,7 @@ export const getAllOffices = async (req: Request, res: Response) => {
 export const createOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
-    const { city, address, name } = req.body;
+    const { city, address, name } = req.body as Office;
     const validationErrors = validationResult(req);
     
     if (!validationErrors.isEmpty()) {

@@ -1,16 +1,15 @@
 {
     "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "Node",
+        "target": "es6",
+        "module": "commonJS",
+        "moduleResolution": "node",
         "noImplicitAny": false,
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-    },
-    "ts-node": {
-        "esm": true
+        "strict": true
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "**/*.spec.ts"],
