@@ -11,9 +11,8 @@ const PATH_DB = 'src/database/database.db';
 export const getAllOffices = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const sql = 'SELECT * FROM offices';
-    const params = [];
 
-    db.all(sql, params, (err, rows: Office[]) => {
+    db.all(sql, [], (err, rows: Office[]) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -39,7 +38,7 @@ export const createOffice = async (req: Request, res: Response) => {
     const random = uuid();
     const { city, address, name } = req.body as Office;
     const validationErrors = validationResult(req);
-    
+
     if (!validationErrors.isEmpty()) {
         return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ error: validationErrors.array() });
     }

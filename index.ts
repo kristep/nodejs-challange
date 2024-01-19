@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import { StatusCodes } from 'http-status-codes';
 
-import { officeRouter } from './src/routes/offices.ts';
-import { employeeRouter } from './src/routes/employees.ts';
+import { officeRouter } from './src/routes/offices';
+import { employeeRouter } from './src/routes/employees';
 
 const app = express();
 const port = 3000;

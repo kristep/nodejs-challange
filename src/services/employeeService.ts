@@ -11,9 +11,8 @@ const PATH_DB = 'src/database/database.db';
 export const getAllEmployees = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const sql = 'SELECT * FROM employees';
-    const params = [];
 
-    db.all(sql, params, (err, rows: Employee[]) => {
+    db.all(sql, [], (err, rows: Employee[]) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
