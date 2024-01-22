@@ -10,9 +10,9 @@ const PATH_DB = 'src/database/database.db';
 
 export const getAllOffices = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
-    const sql = 'SELECT * FROM offices';
+    const query = 'SELECT * FROM offices';
 
-    db.all(sql, [], (err, rows: Office[]) => {
+    db.all(query, [], (err, rows: Office[]) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -37,13 +37,15 @@ export const createOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
     const { city, address, name } = req.body as Office;
+    const query = 'INSERT INTO offices(id, city, address, name) VALUES(?,?,?,?)';
+    const params =  [random, city, address, name]
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
         return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ error: validationErrors.array() });
     }
 
-    db.run(`INSERT INTO offices(id, city, address, name) VALUES(?,?,?,?)`, [random, city, address, name], (err) => {
+    db.run(query,params, (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -57,9 +59,10 @@ export const createOffice = async (req: Request, res: Response) => {
 export const updateOfficeName = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const { name } = req.body;
-    const id = req.params.id;
+    const query = 'UPDATE offices SET name = ? WHERE id = ?'
+const params = [name, req.params.id]
 
-    db.run(`UPDATE offices SET name = ? WHERE id = ?`, [name, id], (err) => {
+    db.run(query, params, (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -72,9 +75,10 @@ export const updateOfficeName = async (req: Request, res: Response) => {
 
 export const deleteOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
-    const id = req.params.id;
+    const query = 'DELETE FROM offices WHERE id = ?'
+    const params = [req.params.id];
 
-    db.run(`DELETE FROM offices WHERE id = ?`, [id], (err) => {
+    db.run(query, params, (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         } else {

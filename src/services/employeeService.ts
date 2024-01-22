@@ -8,11 +8,28 @@ import { Employee } from '../types';
 
 const PATH_DB = 'src/database/database.db';
 
+export const getEmployee = async (req: Request, res: Response) => {
+    const db = new sqlite3.Database(PATH_DB);
+    const query = 'SELECT * FROM employees WHERE id = ?';
+    const params = [req.params.id];
+
+    db.get(query, params, (err, rows: Employee[]) => {
+        if (err) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+        }
+
+        return res.status(StatusCodes.OK).json({
+            message: 'success',
+            data: rows,
+        });
+    });
+};
+
 export const getAllEmployees = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
-    const sql = 'SELECT * FROM employees';
+    const query = 'SELECT * FROM employees';
 
-    db.all(sql, [], (err, rows: Employee[]) => {
+    db.all(query, [], (err, rows: Employee[]) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -37,32 +54,32 @@ export const createEmployee = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const random = uuid();
     const { first_name, last_name, address, office_id, title, prefers_remote } = req.body as Employee;
+    const query =
+        'INSERT INTO employees(id, first_name, last_name, address, office_id, title, prefers_remote) VALUES(?,?,?,?,?,?,?)';
+    const params = [random, first_name, last_name, address, office_id, title, prefers_remote];
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
         return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ error: validationErrors.array() });
     }
 
-    db.run(
-        `INSERT INTO employees(id, first_name, last_name, address, office_id, title, prefers_remote) VALUES(?,?,?,?,?,?,?)`,
-        [random, first_name, last_name, address, office_id, title, prefers_remote],
-        (err) => {
-            if (err) {
-                return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
-            }
-
-            return res.status(StatusCodes.CREATED).json({ data: req.body });
+    db.run(query, params, (err) => {
+        if (err) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
-    );
+
+        return res.status(StatusCodes.CREATED).json({ data: req.body });
+    });
 
     db.close();
 };
 
 export const deleteEmployee = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
-    const id = req.params.id;
+    const query = 'DELETE FROM employees WHERE id = ?';
+    const params = [req.params.id];
 
-    db.run(`DELETE FROM employees WHERE id = ?`, [id], (err) => {
+    db.run(query, params, (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         } else {
@@ -75,19 +92,17 @@ export const deleteEmployee = async (req: Request, res: Response) => {
 
 export const getRemoteEmployeesPerOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
-    const office_id = req.params.office_id;
+    const query =
+        'SELECT COUNT(prefers_remote) AS remote_employees FROM employees WHERE office_id = ? AND prefers_remote';
+    const params = [req.params.office_id];
 
-    db.get(
-        `SELECT COUNT(prefers_remote) AS remote_employees FROM employees WHERE office_id = ? AND prefers_remote`,
-        [office_id],
-        (err, count) => {
-            if (err) {
-                return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
-            } else {
-                return res.status(StatusCodes.OK).json({ data: count });
-            }
+    db.get(query, params, (err, count) => {
+        if (err) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+        } else {
+            return res.status(StatusCodes.OK).json({ data: count });
         }
-    );
+    });
 
     db.close();
 };
