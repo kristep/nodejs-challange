@@ -44,7 +44,8 @@ export const createEmployee = async (req: Request, res: Response) => {
     }
 
     db.run(
-        `INSERT INTO employees(id, first_name, last_name, address, office_id, title, prefers_remote) VALUES('${random}', '${first_name}', '${last_name}','${address}', '${office_id}','${title}','${prefers_remote}')`,
+        `INSERT INTO employees(id, first_name, last_name, address, office_id, title, prefers_remote) VALUES(?,?,?,?,?,?,?)`,
+        [random, first_name, last_name, address, office_id, title, prefers_remote],
         (err) => {
             if (err) {
                 return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
@@ -61,7 +62,7 @@ export const deleteEmployee = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const id = req.params.id;
 
-    db.run(`DELETE FROM employees WHERE id = '${id}'`, (err) => {
+    db.run(`DELETE FROM employees WHERE id = ?`, [id], (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         } else {
@@ -77,7 +78,8 @@ export const getRemoteEmployeesPerOffice = async (req: Request, res: Response) =
     const office_id = req.params.office_id;
 
     db.get(
-        `SELECT COUNT(prefers_remote) AS remote_employees FROM employees WHERE office_id = '${office_id}' AND prefers_remote`,
+        `SELECT COUNT(prefers_remote) AS remote_employees FROM employees WHERE office_id = ? AND prefers_remote`,
+        [office_id],
         (err, count) => {
             if (err) {
                 return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });

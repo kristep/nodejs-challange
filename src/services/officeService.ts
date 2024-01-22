@@ -43,16 +43,13 @@ export const createOffice = async (req: Request, res: Response) => {
         return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ error: validationErrors.array() });
     }
 
-    db.run(
-        `INSERT INTO offices(id, city, address, name) VALUES('${random}', '${city}', '${address}', '${name}')`,
-        (err) => {
-            if (err) {
-                return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
-            }
-
-            return res.status(StatusCodes.CREATED).json({ data: req.body });
+    db.run(`INSERT INTO offices(id, city, address, name) VALUES(?,?,?,?)`, [random, city, address, name], (err) => {
+        if (err) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
-    );
+
+        return res.status(StatusCodes.CREATED).json({ data: req.body });
+    });
 
     db.close();
 };
@@ -62,7 +59,7 @@ export const updateOfficeName = async (req: Request, res: Response) => {
     const { name } = req.body;
     const id = req.params.id;
 
-    db.run(`UPDATE offices SET name = '${name}' WHERE id = '${id}'`, (err) => {
+    db.run(`UPDATE offices SET name = ? WHERE id = ?`, [name, id], (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         }
@@ -77,7 +74,7 @@ export const deleteOffice = async (req: Request, res: Response) => {
     const db = new sqlite3.Database(PATH_DB);
     const id = req.params.id;
 
-    db.run(`DELETE FROM offices WHERE id = '${id}'`, (err) => {
+    db.run(`DELETE FROM offices WHERE id = ?`, [id], (err) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
         } else {
