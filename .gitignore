@@ -13,4 +13,4 @@ node_modules/
 .env.local
 
 ./dist
-src/database/database.db
+src/database.db

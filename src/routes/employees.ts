@@ -2,12 +2,12 @@ import express from 'express';
 import { body } from 'express-validator';
 
 import {
-    createEmployee,
-    deleteEmployee,
-    getAllEmployees,
-    getEmployee,
-    getRemoteEmployeesPerOffice,
-} from '../services/employeeService';
+    createEmployeeController,
+    deleteEmployeeController,
+    getEmployeeByIdController,
+    getEmployeesController,
+    getRemoteEmployeesPerOfficeController,
+} from '../controllers/employeeController';
 
 export const employeeRouter = express.Router();
 
@@ -17,8 +17,8 @@ const validationCreateEmployee = [
     body('last_name').trim().notEmpty(),
 ];
 
-employeeRouter.get('/all-employees', getAllEmployees);
-employeeRouter.get('/employee/:id', getEmployee);
-employeeRouter.post('/create-employee', validationCreateEmployee, createEmployee);
-employeeRouter.delete('/delete-employee/:id', deleteEmployee);
-employeeRouter.get('/remote-employees/:office_id', getRemoteEmployeesPerOffice);
+employeeRouter.get('/all-employees', getEmployeesController);
+employeeRouter.get('/employee/:id', getEmployeeByIdController);
+employeeRouter.post('/create-employee', validationCreateEmployee, createEmployeeController);
+employeeRouter.delete('/delete-employee/:id', deleteEmployeeController);
+employeeRouter.get('/remote-employees/:office_id', getRemoteEmployeesPerOfficeController);
