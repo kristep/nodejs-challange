@@ -1,7 +1,12 @@
 import express from 'express';
 import { body } from 'express-validator';
 
-import { createOfficeController, deleteOfficeController, getOfficesController, updateOfficeNameController } from '../controllers/officeController';
+import {
+    createOfficeController,
+    deleteOfficeController,
+    getOfficesController,
+    updateOfficeNameController,
+} from '../controllers/officeController';
 
 export const officeRouter = express.Router();
 

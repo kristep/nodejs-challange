@@ -15,7 +15,7 @@ export const createOffice = async (newOffice: Office) => {
         const office = await addOffice(newOffice);
         return office;
     } catch (error) {
-        return null;
+        return;
     }
 };
 
@@ -24,15 +24,15 @@ export const updateOfficeName = async (id: string, name: string) => {
         const office = await updateOffice(id, name);
         return office;
     } catch (error) {
-        return null;
+        return;
     }
-}
+};
 
 export const removeOffice = async (id: string) => {
     try {
         const result = await deleteOffice(id);
         return result;
     } catch (error) {
-        return null;
+        return;
     }
 };

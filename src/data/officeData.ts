@@ -19,12 +19,10 @@ export const getOffices = () => {
     });
 };
 
-
 export const addOffice = async (office: Office) => {
     const random = uuid();
     const { city, address, name } = office;
-    const query =
-        'INSERT INTO offices(id, city, address, name) VALUES(?,?,?,?)';
+    const query = 'INSERT INTO offices(id, city, address, name) VALUES(?,?,?,?)';
     const params = [random, city, address, name];
 
     return new Promise<RunResult>((resolve, reject) => {
@@ -43,18 +41,15 @@ export const updateOffice = async (id: string, name: string) => {
     const params = [name, id];
 
     return new Promise<RunResult>((resolve, reject) => {
-
         db.run(query, params, function (err) {
             if (err) {
-               reject(err)
+                reject(err);
             } else {
-                resolve(this)
+                resolve(this);
             }
-    
-            
         });
     });
-}
+};
 
 export const deleteOffice = async (id: string) => {
     const query = 'DELETE FROM offices WHERE id = ?';
@@ -70,7 +65,6 @@ export const deleteOffice = async (id: string) => {
         });
     });
 };
-
 
 // Close the database connection when the application is shutting down
 process.on('exit', () => db.close());

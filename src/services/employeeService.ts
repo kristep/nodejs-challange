@@ -1,12 +1,18 @@
 import { Employee } from '../types';
-import { addEmployee, getEmployees, getEmployeeById, deleteEmployee, countRemoteEmployeesPerOffice } from '../data/employeeData';
+import {
+    addEmployee,
+    getEmployees,
+    getEmployeeById,
+    deleteEmployee,
+    countRemoteEmployeesPerOffice,
+} from '../data/employeeData';
 
 export const getAllEmployees = async () => {
     try {
         const employees = await getEmployees();
         return employees;
     } catch (error) {
-        return null;
+        return;
     }
 };
 
@@ -15,7 +21,7 @@ export const getEmployee = async (id: string) => {
         const employee = await getEmployeeById(id);
         return employee;
     } catch (error) {
-        return null;
+        return;
     }
 };
 
@@ -24,7 +30,7 @@ export const createEmployee = async (newEmployee: Employee) => {
         const employee = await addEmployee(newEmployee);
         return employee;
     } catch (error) {
-        return null;
+        return;
     }
 };
 
@@ -33,7 +39,7 @@ export const removeEmployee = async (id: string) => {
         const result = await deleteEmployee(id);
         return result;
     } catch (error) {
-        return null;
+        return;
     }
 };
 
@@ -42,6 +48,6 @@ export const getRemoteEmployeesPerOffice = async (office_id: string) => {
         const res = await countRemoteEmployeesPerOffice(office_id);
         return res;
     } catch (error) {
-        return null;
+        return;
     }
 };

@@ -67,7 +67,7 @@ export const deleteEmployee = async (id: string) => {
     });
 };
 
-export const countRemoteEmployeesPerOffice =async (office_id: string) => {
+export const countRemoteEmployeesPerOffice = async (office_id: string) => {
     const query =
         'SELECT COUNT(prefers_remote) AS remote_employees FROM employees WHERE office_id = ? AND prefers_remote';
     const params = [office_id];
@@ -81,7 +81,7 @@ export const countRemoteEmployeesPerOffice =async (office_id: string) => {
             }
         });
     });
-}
+};
 
 // Close the database connection when the application is shutting down
 process.on('exit', () => db.close());
